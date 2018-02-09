@@ -3,6 +3,30 @@ import enum
 
 
 class PlayingCard:
+    def __init__(self, suit, name):
+        self.suit = suit
+        self.name = name
+        if not isinstance(suit, Suits):
+            raise TypeError
+
+    def get_value(self):
+        pass
+
+    def get_suit(self):
+        pass
+
+    def get_name(self):
+        return self.name
+
+    def print(self):
+        print(self.get_name(), " of ", self.get_suit())
+
+
+class NumberedCard(PlayingCard):    # Add name to the cards
+    def __init__(self, value, suit, name):
+        self.value = value
+        super().__init__(suit, name)
+
     def get_value(self):
         return self.value
 
@@ -10,34 +34,36 @@ class PlayingCard:
         return self.suit
 
 
-class NumberedCard(PlayingCard):
-    def __init__(self, value, suit):
-        self.value = value
-        self.suit = suit
-
-
 class JackCard(PlayingCard):
-    def __init__(self, suit):
-        self.value = 11
-        self.suit = suit
+    def get_value(self):
+        return 11
+
+    def get_suit(self):
+        return self.suit
 
 
 class QueenCard(PlayingCard):
-    def __init__(self, suit):
-        self.value = 12
-        self.suit = suit
+    def get_value(self):
+        return 12
+
+    def get_suit(self):
+        return self.suit
 
 
 class KingCard(PlayingCard):
-    def __init__(self, suit):
-        self.value = 13
-        self.suit = suit
+    def get_value(self):
+        return 13
+
+    def get_suit(self):
+        return self.suit
 
 
 class AceCard(PlayingCard):
-    def __init__(self, suit):
-        self.value = 14
-        self.suit = suit
+    def get_value(self):
+        return 14
+
+    def get_suit(self):
+        return self.suit
 
 
 class Suits(enum.IntEnum):
@@ -46,28 +72,26 @@ class Suits(enum.IntEnum):
     diamonds = 1
     clubs = 0
 
+    def __str__(self):
+        return '♣♦♠♥'[self.value]
+
 
 class StandardDeck:
     def __init__(self):
         self.cards = []
 
-        suits = [Suits.hearts, Suits.diamonds, Suits.spades, Suits.clubs]
+        for color in Suits:
+            for i in range(2, 11):
 
-        for i in range(2, 11):
-            for color in suits:
-                self.cards.append((str(i), NumberedCard(i, color)))
+                self.cards.append(NumberedCard(i, color, str(i)))
 
-        for color in suits:
-            self.cards.append(("Jack", JackCard(color)))
+            self.cards.append(JackCard(color, "Jack"))
 
-        for color in suits:
-            self.cards.append(("Queen", QueenCard(color)))
+            self.cards.append(QueenCard(color, "Queen"))
 
-        for color in suits:
-            self.cards.append(("King", KingCard(color)))
+            self.cards.append(KingCard(color, "King"))
 
-        for color in suits:
-            self.cards.append(("Ace", AceCard(color)))
+            self.cards.append(AceCard(color, "Ace"))
 
     def shuffle(self):
         shuffle(self.cards)
@@ -98,22 +122,44 @@ class Hand:
             raise Exception("Index out of bounds exception")
 
     def sort_hand(self):
-        self.hand.sort(key=lambda k: [k[1].get_suit().value, k[1].get_value()])
+        self.hand.sort(key=lambda k: [k.get_suit().value, k.get_value()])
+
+    def best_poker_hand(self, cards=[]):
+        hand = self.two_pair()
+        return hand
+
+    def two_pair(self):
+        list = [0]*14
+        print(list)
+        for v in self.hand:
+            list[v[1].get_value()-1] += 1
+        if 2 in list:
+            print(list)
+
+            return ((PokerHand.pair.value, PokerHand.value.value))
+        else:
+            return False
 
 
-class PokerHand(enum.IntEnum):
+class PokerHandType(enum.IntEnum):
+    value = 0
     pair = 1
     two_pair = 2
     # etc...
 
-class Pair(PokerHand):
+
+class PokerHand:
+    # Använder PokerHandType för PokerHand objektet
     pass
+
 
 deck = StandardDeck()
 deck.shuffle()
-print(len(deck.cards))
-for t in deck.cards:
-    print(t[0], " of ", t[1].get_suit().name)
+#print(len(deck.cards))
+#for t in deck.cards:
+#    t.print()
+
+
 #print(deck.cards[1][1].get_value()
 
 #if deck.cards[0][1].get_value() == deck.cards[1][1].get_value():
@@ -125,11 +171,12 @@ for t in deck.cards:
 #print(deck.cards[0][1].get_value())
 
 top = deck.take_top()
-print("Top card: ", top)
-for t in deck.cards:
-    print(t[0], " of ", t[1].get_suit().name)
+#print("Top card:", end=" ")
+#top.print()
+#for t in deck.cards:
+#    t.print()
 
-print(len(deck.cards))
+#print(len(deck.cards))
 
 hand = Hand()
 hand.add_card(top)
@@ -138,17 +185,22 @@ hand.add_card(top)
 top = deck.take_top()
 hand.add_card(top)
 
-for t in hand.hand:
-    print(t[0], " of ", t[1].get_suit().name)
+#for t in hand.hand:
+#    t.print()
 
 hand.sort_hand()
 
 for t in hand.hand:
-    print(t[0], " of ", t[1].get_suit().name)
+    t.print()
 
-index = [2, 3]
-print("Print max index: ", max(index))
+index = [2, 0]
+#print("Print max index: ", max(index))
 hand.remove_card(index)
 
 for t in hand.hand:
-    print(t[0], " of ", t[1].get_suit().name)
+    t.print()
+
+
+#print(hand.hand)
+#ret = hand.best_poker_hand()
+#print(ret)
