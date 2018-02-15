@@ -261,7 +261,9 @@ class Chicago(Game):
     def start_game(self):
         deck = StandardDeck()
         deck.shuffle()
-        num_of_players = input('How many players are playing? \n')
+        num_of_players = int(input('How many players are playing? \n'))
+        for n in range(num_of_players):
+            print(n)
         while len(self.hand) < self.max_num_of_cards:
             top = deck.take_top()
             self.hand.add_card(top)
@@ -270,8 +272,8 @@ class Chicago(Game):
     def run_game(self):
         for rounds in range(self.num_of_rounds):
             self.show_game_state(rounds)
-            discarded_cards = '[' + input('Select cards by giving the index from 0 to {} separated by commas \n'
-                                          'or press \'Enter\' ' .format(self.max_num_of_cards_to_swap-1)) + ']'
+            discarded_cards = '[' + input('Select cards to discard by giving the index from 0 to {} separated by commas'
+                                          ' or press \'Enter\' \n' .format(self.max_num_of_cards_to_swap-1)) + ']'
             discarded_cards = eval(discarded_cards)
             self.hand.remove_card(discarded_cards)
             while self.hand.__len__() < self.max_num_of_cards:
