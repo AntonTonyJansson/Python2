@@ -401,7 +401,7 @@ while hand.check_num_of_cards() < max_num_of_cards:
     top = deck.take_top()
     hand.add_card(top)
 
-for t in hand.hand:
+for t in hand.hand:   khv
     t.print()
 
 ret = hand.best_poker_hand()
