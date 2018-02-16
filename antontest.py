@@ -134,22 +134,23 @@ class Hand:
         if 4 in list:
             print('You got four of a kind in {}:s' .format(kinds_of_values[list.index(4)]))
             hand_rank = PokerHandType.four_of_a_kind.value
-            highest_card = value_cards[-1]
-            rank_value = kinds_of_values[list.index(4)]
-            return PokerHand(hand_rank, highest_card, rank_value)
-        elif 3 in list and list.count(2) == 1:
-            print('You got a full house in :s and :s')
+            rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
+            return PokerHand(hand_rank, rank_value)
+        elif 3 in list and 2 in list:
             hand_rank = PokerHandType.full_house.value
-            highest_card = value_cards[-1]
-            rank_value = 0 # ÄNDRA
-            return PokerHand(hand_rank, highest_card, rank_value)
+            rank_value = ((list.index(3), len(list) - list.reverse().index(2)))
+            return PokerHand(hand_rank, rank_value)
+        elif list.count(3) == 2:
+            hand_rank = PokerHandType.full_house.value
+            rank_value = ((len(list) - list.reverse().index(3), list.index(3)))
+            return PokerHand(hand_rank, rank_value)
         elif list.count(1) >= 5:
-            if len(set(suit_cards)) == 1:
-                print('You got a flush')
-                hand_rank = PokerHandType.flush.value
-                highest_card = value_cards[-1]
-                rank_value = 0 # ÄNDRA!
-                return PokerHand(hand_rank, highest_card, rank_value)
+            for suit in Suits:
+                if suit_cards.count(suit) >= 5:
+                    print('You got a flush')
+                    hand_rank = PokerHandType.flush.value
+                    rank_value = ((suit, ))
+                    return PokerHand(hand_rank, rank_value)
             first_pos = list.index(1)
             second_pos = first_pos+1
             subseq_cards = 0
@@ -224,13 +225,21 @@ class PokerHandType(enum.IntEnum):
 
 class PokerHand:
     # Använder PokerHandType för PokerHand objektet
-    def __init__(self, hand_rank, highest_card, rank_value):
+    def __init__(self, hand_rank, rank_value):
         # Value of hand
         self.hand_rank = hand_rank
-        # Highest card
-        self.highest_card = highest_card
         # Value of e.g. the pair
         self.rank_value = rank_value
+
+    def __lt__(self, hand2):
+        if self.hand_rank > hand2.hand_rank:
+            return True
+        elif self.rank_value > hand2.rank_value:
+            return True
+        elif self.rank_value[1] > hand2.rank_value[1]:
+            return True
+        else:
+            return False
 
 
 class Game:
@@ -261,9 +270,6 @@ class Chicago(Game):
     def start_game(self):
         deck = StandardDeck()
         deck.shuffle()
-        num_of_players = int(input('How many players are playing? \n'))
-        for n in range(num_of_players):
-            print(n)
         while len(self.hand) < self.max_num_of_cards:
             top = deck.take_top()
             self.hand.add_card(top)
@@ -298,10 +304,45 @@ class Chicago(Game):
             print('This is swap number:', rounds + 1, 'out of', self.num_of_rounds)
 
 
+kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 game = Chicago()
-deck, hand = game.start_game()
-game.run_game()
-game.show_game_state(4)
+deck = StandardDeck()
+deck.shuffle()
+
+hand1 = Hand()
+while len(hand1) < 5:
+    top = deck.take_top()
+    hand1.add_card(top)
+for t in hand1.cards:
+    print(str(t))
+discarded_cards = '[' + input('Select cards to discard by giving the index from 0 to {} separated by commas'
+                              ' or press \'Enter\' \n'.format(5 - 1)) + ']'
+discarded_cards = eval(discarded_cards)
+hand1.remove_card(discarded_cards)
+player1 = Hand.best_poker_hand(hand1, kinds_of_values)
+
+
+
+
+hand2 = Hand()
+while len(hand2) < 5:
+    top = deck.take_top()
+    hand2.add_card(top)
+for t in hand2.cards:
+    print(str(t))
+discarded_cards = '[' + input('Select cards to discard by giving the index from 0 to {} separated by commas'
+                              ' or press \'Enter\' \n'.format(5 - 1)) + ']'
+discarded_cards = eval(discarded_cards)
+hand2.remove_card(discarded_cards)
+player2 = Hand.best_poker_hand(hand2, kinds_of_values)
+
+
+
+print(player1 < player2)
+
+# deck, hand = game.start_game()
+#game.run_game()
+# game.show_game_state(4)
 
 #deck = StandardDeck()
 #for c in deck.cards:
