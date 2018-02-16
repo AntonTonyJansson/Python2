@@ -3,6 +3,7 @@ import enum
 import numpy as np
 import abc
 
+
 class PlayingCard(metaclass=abc.ABCMeta):
     def __init__(self, suit):
         self.suit = suit
