@@ -129,28 +129,19 @@ class Hand:
     def best_poker_hand2(self, table_cards=[]):
         total_cards = self.cards + table_cards      # Kan modifieras in så att spelet funkar för texad holdem
 
+
     def best_poker_hand(self, kinds_of_values):     # Just nu funkar detta bara för chicago inte för texas
         value_cards, list, suit_cards = create_bins_for_cards(self.cards)
-        if 4 in list:
-            print('You got four of a kind in {}:s' .format(kinds_of_values[list.index(4)]))
-            hand_rank = PokerHandType.four_of_a_kind.value
-            rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
-            return PokerHand(hand_rank, rank_value)
-        elif 3 in list and 2 in list:
-            hand_rank = PokerHandType.full_house.value
-            rank_value = ((list.index(3), len(list) - list.reverse().index(2)))
-            return PokerHand(hand_rank, rank_value)
-        elif list.count(3) == 2:
-            hand_rank = PokerHandType.full_house.value
-            rank_value = ((len(list) - list.reverse().index(3), list.index(3)))
-            return PokerHand(hand_rank, rank_value)
+        total_cards = []
+        cond, best_hand = four_of_a_kind_test(list, value_cards)
+        if cond:
+            return best_hand
+        cond, best_hand = total_cards.full_house_test()
+        if cond:
+            return best_hand
+
         elif list.count(1) >= 5:
-            for suit in Suits:
-                if suit_cards.count(suit) >= 5:
-                    print('You got a flush')
-                    hand_rank = PokerHandType.flush.value
-                    rank_value = ((suit, ))
-                    return PokerHand(hand_rank, rank_value)
+
             first_pos = list.index(1)
             second_pos = first_pos+1
             subseq_cards = 0
@@ -195,6 +186,86 @@ class Hand:
 
     def __len__(self):
         return len(self.cards)
+
+
+def four_of_a_kind_test(list,value_cards):
+    if 4 in list:
+        print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
+        hand_rank = PokerHandType.four_of_a_kind.value
+        rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def full_house_test(list):
+    if 3 in list and 2 in list:
+        hand_rank = PokerHandType.full_house.value
+        rank_value = ((list.index(3), len(list) - list.reverse().index(2)))
+        return True, PokerHand(hand_rank, rank_value)
+    elif list.count(3) == 2:
+        hand_rank = PokerHandType.full_house.value
+        rank_value = ((len(list) - list.reverse().index(3), list.index(3)))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def flush_test(cards, suit_cards):
+    if list.count(1) >= 5:
+        v = []
+        for suit in Suits:
+            if suit_cards.count(suit) >= 5:
+                for card in cards:
+                    if card.get_suit() == suit:
+                        v.append(card.get_value())
+                print('You got a flush')
+                hand_rank = PokerHandType.flush.value
+                rank_value = ((suit, v[-1]))
+                return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def straight_test(list, value_cards):
+    if list.count(1) >= 5:
+        i = 0
+        for c in reversed(list):  # Starting point (high card)
+            # Check if we have the value - k in the set of cards:
+            if c > 0:
+                found_straight = True
+                for k in range(1, 5):
+                    if list(i+k) == 0:
+                        found_straight = False
+                        break
+
+                if found_straight:
+                    hand_rank = PokerHandType.straight.value
+                    rank_value = ((len(list) - i, len(list) - (i+1)))
+                    return True, PokerHand(hand_rank, rank_value)
+                i += 1
+            else:
+                i += 1
+
+
+
+        first_pos = list.index(1)
+        second_pos = first_pos + 1
+        subseq_cards = 0
+        while list[second_pos] == list[first_pos] and second_pos < 15:
+            print(first_pos + 2, 'and ', second_pos + 2, 'are subsequent')
+            first_pos += 1
+            second_pos += 1
+            subseq_cards += 1
+        if subseq_cards == 4:
+            hand_rank = PokerHandType.straight.value
+            highest_card = value_cards[-1]
+            rank_value = 0  # ÄNDRA!
+            return PokerHand(hand_rank, highest_card, rank_value)
+        else:
+            hand_rank = PokerHandType.value.value
+            highest_card = value_cards[-1]
+            return PokerHand(hand_rank, highest_card, 0)
 
 
 def create_bins_for_cards(cards):
