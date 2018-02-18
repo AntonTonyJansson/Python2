@@ -2,6 +2,7 @@ from random import shuffle
 import enum
 import numpy as np
 import abc
+from collections import Counter
 
 class PlayingCard(metaclass=abc.ABCMeta):
     def __init__(self, suit):
@@ -209,6 +210,11 @@ def create_bins_for_cards(cards):
         i += 1
     value_cards.sort()
     return value_cards, list, suit_cards
+
+def countcards(cards):
+    list = Counter()
+    for v in cards:
+        list[v] += 1
 
 
 class PokerHandType(enum.IntEnum):
