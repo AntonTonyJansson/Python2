@@ -3,7 +3,6 @@ import enum
 import numpy as np
 import abc
 
-
 class PlayingCard(metaclass=abc.ABCMeta):
     def __init__(self, suit):
         self.suit = suit
@@ -121,85 +120,176 @@ class Hand:
                     self.cards.pop(i)
             else:
                 raise Exception("Index out of bounds exception")
-        else:
-            print('No card chosen to discard')
 
     def sort_hand(self):
         self.cards.sort(key=lambda k: [k.get_suit().value, k.get_value()])
 
-    def best_poker_hand2(self, table_cards=[]):
-        total_cards = self.cards + table_cards      # Kan modifieras in så att spelet funkar för texad holdem
+    def best_poker_hand_total(self, table_cards):
+        total_cards = self.cards + table_cards
+        return total_cards
 
-    def best_poker_hand(self, kinds_of_values):     # Just nu funkar detta bara för chicago inte för texas
-        value_cards, list, suit_cards = create_bins_for_cards(self.cards)
-        if 4 in list:
-            print('You got four of a kind in {}:s' .format(kinds_of_values[list.index(4)]))
-            hand_rank = PokerHandType.four_of_a_kind.value
-            highest_card = value_cards[-1]
-            rank_value = kinds_of_values[list.index(4)]
-            return PokerHand(hand_rank, highest_card, rank_value)
-        elif 3 in list and list.count(2) == 1:
-            print('You got a full house in :s and :s')
-            hand_rank = PokerHandType.full_house.value
-            highest_card = value_cards[-1]
-            rank_value = 0 # ÄNDRA
-            return PokerHand(hand_rank, highest_card, rank_value)
-        elif list.count(1) >= 5:
-            if len(set(suit_cards)) == 1:
-                print('You got a flush')
-                hand_rank = PokerHandType.flush.value
-                highest_card = value_cards[-1]
-                rank_value = 0 # ÄNDRA!
-                return PokerHand(hand_rank, highest_card, rank_value)
-            first_pos = list.index(1)
-            second_pos = first_pos+1
-            subseq_cards = 0
-            while list[second_pos] == list[first_pos] and second_pos < 15:
-                print(first_pos+2, 'and ', second_pos+2, 'are subsequent')
-                first_pos += 1
-                second_pos += 1
-                subseq_cards += 1
-            if subseq_cards == 4:
-                hand_rank = PokerHandType.straight.value
-                highest_card = value_cards[-1]
-                rank_value = 0  # ÄNDRA!
-                return PokerHand(hand_rank, highest_card, rank_value)
-            else:
-                hand_rank = PokerHandType.value.value
-                highest_card = value_cards[-1]
-                return PokerHand(hand_rank, highest_card, 0)
-        elif 3 in list:
-            print('You got three of a kind in {}:s' .format(kinds_of_values[list.index(3)]))
-            hand_rank = PokerHandType.three_of_a_kind.value
-            highest_card = value_cards[-1]
-            rank_value = kinds_of_values[list.index(3)]
-            return PokerHand(hand_rank, highest_card, rank_value)
-        elif 2 in list:
-            if list.count(2) > 1:
-                values = np.array(list)
-                searchval = 2
-                ii = np.where(values == searchval)[0]
-                a = int(ii[-1])
-                b = int(ii[-2])
-                print('You got two pairs in {}:s over {}:s' .format(kinds_of_values[a], kinds_of_values[b]))
-                hand_rank = PokerHandType.two_pair.value
-                highest_card = value_cards[-1]
-                rank_value = kinds_of_values[a], kinds_of_values[b]
-                return PokerHand(hand_rank, highest_card, rank_value)
-            else:
-                print('You got one pair in {}:s' .format(kinds_of_values[list.index(2)]))
-                hand_rank = PokerHandType.pair.value
-                highest_card = value_cards[-1]
-                rank_value = kinds_of_values[list.index(2)]
-                return PokerHand(hand_rank, highest_card, rank_value)
+    def best_poker_hand(self, kinds_of_values, table_cards):
+        total_cards = self.best_poker_hand_total(table_cards)
+        value_cards, list, suit_cards = create_bins_for_cards(total_cards)
+        cond, best_hand = four_of_a_kind_test(list, value_cards, kinds_of_values)
+        if cond:
+            return best_hand
+        cond, best_hand = full_house_test(list)
+        if cond:
+            return best_hand
+        cond, best_hand = flush_test(total_cards, suit_cards, list)
+        if cond:
+            return best_hand
+        cond, best_hand = straight_test(list)
+        if cond:
+            return best_hand
+        cond, best_hand = three_of_a_kind_test(list, value_cards)
+        if cond:
+            return best_hand
+        cond, best_hand = two_pairs_test(list, value_cards, kinds_of_values)
+        if cond:
+            return best_hand
+        cond, best_hand = one_pair_test(list, value_cards, kinds_of_values)
+        if cond:
+            return best_hand
+        cond, best_hand = high_card_test(list)
+        if cond:
+            return best_hand
+
 
     def __len__(self):
         return len(self.cards)
 
 
+# Mycket upprensning behövs för de olika listorna så allt blir rätt värde
+def four_of_a_kind_test(list, value_cards, kinds_of_values):
+    if 4 in list:
+        print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
+        hand_rank = PokerHandType.four_of_a_kind.value
+        rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def full_house_test(list):
+    if 3 in list and 2 in list:
+        temp_list = list.copy()
+        temp_list.reverse()
+        hand_rank = PokerHandType.full_house.value
+        rank_value = ((len(temp_list)-1 - temp_list.index(3), len(temp_list)-1 - temp_list.index(2)))
+        print('You got a full house with {}:s over {}:s' .format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
+                                                                 kinds_of_values[len(temp_list)-1 - temp_list.index(2)]))
+        return True, PokerHand(hand_rank, rank_value)
+    elif list.count(3) == 2:
+        hand_rank = PokerHandType.full_house.value
+        rank_value = ((len(list) - list.index(3), list.index(3)+2))
+        print('den här funkar')
+        print('You got a full house with {}:s over {}:s'.format(len(list)-1 - list.index(3), list.index(3)+1))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def flush_test(cards, suit_cards, list):
+    if list.count(1) >= 5:
+        v = []
+        for suit in Suits:
+            if suit_cards.count(suit) >= 5:
+                for card in cards:
+                    if card.get_suit() == suit:
+                        v.append(card.get_value())
+                print('You got a flush')
+                hand_rank = PokerHandType.flush.value
+                rank_value = ((suit, v[-1]))
+                return True, PokerHand(hand_rank, rank_value)
+            else:
+                return False, None
+    else:
+        return False, None
+
+
+def straight_test(list):             # Måste modifieras för när listan går utanför index i list
+    if list.count(1) >= 5:
+        i = 0
+        temp_list = list.copy()
+        temp_list.reverse()
+        for c in temp_list:  # Starting point (high card)
+            # Check if we have the value - k in the set of cards:
+            if c > 0:
+                found_straight = True
+                for k in range(1, 5):
+                    if temp_list[i+k] == 0:
+                        found_straight = False
+                        return False, None
+                if found_straight:
+                    hand_rank = PokerHandType.straight.value
+                    rank_value = ((len(temp_list)+2 - i, len(temp_list)+2 - (i+1)))
+                    return True, PokerHand(hand_rank, rank_value)
+                i += 1
+            else:
+                i += 1
+    else:
+        return False, None
+
+
+def three_of_a_kind_test(list, value_cards):
+    if 3 in list:
+        temp_list = list.copy()
+        temp_list.reverse()
+        print('You got three of a kind in {}:s'.format(kinds_of_values[len(temp_list)+2 - temp_list.index(3)]))
+        hand_rank = PokerHandType.three_of_a_kind.value
+        rank_value = ((len(temp_list)+2 - temp_list.index(3), value_cards[-1]))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def two_pairs_test(list, value_cards, kinds_of_values):
+    if 2 in list and list.count(2) > 1:
+        values = np.array(list)
+        searchval = 2
+        ii = np.where(values == searchval)[0]
+        a = int(ii[-1])
+        b = int(ii[-2])
+        print('You got two pairs in {}:s over {}:s'.format(kinds_of_values[a],
+                                                           kinds_of_values[b]))
+        hand_rank = PokerHandType.two_pair.value
+        rank_value = ((((kinds_of_values[a], kinds_of_values[b])), value_cards[-1]))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def one_pair_test(list, value_cards, kinds_of_values):
+    if list.count(2) == 1:
+        print('You got one pair in {}:s'.format(kinds_of_values[list.index(2)]))
+        hand_rank = PokerHandType.pair.value
+        rank_value = ((kinds_of_values[list.index(2)], value_cards[-1]))
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
+def high_card_test(list):
+    hand_rank = PokerHandType.high_card.value
+    values = np.array(list)
+    searchval = 1
+    ii = np.where(values == searchval)[0]
+    a = []
+    if len(ii) == 2:
+        for hc in range(0, 2):
+            a.append(int(ii[-hc])+2)
+    else:
+        for hc in range(0, 5):
+            a.append(int(ii[-hc])+2)
+    rank_value = ((a))
+    return True, PokerHand(hand_rank, rank_value)
+
+
 def create_bins_for_cards(cards):
     list = [0]*13   # Detta bör vara 13?
-    suit_cards = [0]*5 # Bör göras generellt
+    suit_cards = [0]*num_of_cards # Bör göras generellt
     i = 0
     value_cards = []
     for v in cards:
@@ -212,7 +302,7 @@ def create_bins_for_cards(cards):
 
 
 class PokerHandType(enum.IntEnum):
-    value = 0
+    high_card = 0
     pair = 1
     two_pair = 2
     three_of_a_kind = 3
@@ -225,143 +315,132 @@ class PokerHandType(enum.IntEnum):
 
 class PokerHand:
     # Använder PokerHandType för PokerHand objektet
-    def __init__(self, hand_rank, highest_card, rank_value):
+    def __init__(self, hand_rank, rank_value):
         # Value of hand
         self.hand_rank = hand_rank
-        # Highest card
-        self.highest_card = highest_card
         # Value of e.g. the pair
         self.rank_value = rank_value
 
-
-class Game:
-    def __init__(self):
-        self.kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
-
-    @abc.abstractmethod
-    def start_game(self):
-        pass
-
-    @abc.abstractmethod
-    def run_game(self):
-        pass
-
-    @abc.abstractmethod
-    def show_game_state(self, rounds):
-        pass
-
-
-class Chicago(Game):
-    def __init__(self):
-        super().__init__()
-        self.max_num_of_cards = 5
-        self.hand = Hand()
-        self.num_of_rounds = 3
-        self.max_num_of_cards_to_swap = 5
-
-    def start_game(self):
-        deck = StandardDeck()
-        deck.shuffle()
-        num_of_players = input('How many players are playing? \n')
-        while len(self.hand) < self.max_num_of_cards:
-            top = deck.take_top()
-            self.hand.add_card(top)
-        return deck, self.hand
-
-    def run_game(self):
-        for rounds in range(self.num_of_rounds):
-            self.show_game_state(rounds)
-            discarded_cards = '[' + input('Select cards by giving the index from 0 to {} separated by commas \n'
-                                          'or press \'Enter\' ' .format(self.max_num_of_cards_to_swap-1)) + ']'
-            discarded_cards = eval(discarded_cards)
-            self.hand.remove_card(discarded_cards)
-            while self.hand.__len__() < self.max_num_of_cards:
-                top = deck.take_top()
-                self.hand.add_card(top)
-
-    def show_game_state(self, rounds):
-        self.hand.sort_hand()
-        print('This is your hand, sorted by color and then value:')
-        for t in self.hand.cards:
-            print(str(t))
-        current_hand = self.hand.best_poker_hand(self.kinds_of_values)
-        hand_value, hand_high_card = current_hand.hand_rank, current_hand.highest_card
-        vowels = 'A8'
-        if hand_high_card[1][0] in vowels:
-            article = ', an'
+    def __lt__(self, hand2):
+        if self.hand_rank < hand2.hand_rank:
+            return True
+        elif self.hand_rank == hand2.hand_rank:
+            if self.rank_value < hand2.rank_value:
+                return True
+            elif self.rank_value == hand2.rank_value:
+                if self.rank_value[1] < hand2.rank_value[1]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
         else:
-            article = ', a'
-        print('The hand\'s value is:', hand_value)
-        print('Highest card is: {}{} {}' .format(hand_high_card[0], article, hand_high_card[1]))
-        if rounds <= self.num_of_rounds:
-            print('This is swap number:', rounds + 1, 'out of', self.num_of_rounds)
+            return False
 
 
-game = Chicago()
-deck, hand = game.start_game()
-game.run_game()
-game.show_game_state(4)
+kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+#game = Chicago()
+deck = StandardDeck()
+deck.shuffle()
+num_of_cards = 2
 
-#deck = StandardDeck()
-#for c in deck.cards:
-#    print(str(c))
-#print(','.join([str(c) for c in deck.cards]))
+hand1 = Hand()
+hand2 = Hand()
+dealer = Hand()
+
+# Ge spelare 1 ett kort sen spelare två, tills båda har 2 kort:
+
+top = deck.take_top()
+hand1.add_card(top)
+top = deck.take_top()
+hand2.add_card(top)
+top = deck.take_top()
+hand1.add_card(top)
+top = deck.take_top()
+hand2.add_card(top)
+
+print('This is player one\'s hand:')
+for t in hand1.cards:
+    print(str(t))
+
+print('This is player two\'s hand:')
+for t in hand2.cards:
+    print(str(t))
+
+player1 = hand1.best_poker_hand(kinds_of_values, [])
+player2 = hand2.best_poker_hand(kinds_of_values, [])
+
+print('Is player one\'s hand worse than players two\'s?')
+print(player1 < player2)
+
+# Flop:en, alltså dealern tar bort översta kortet och lägger ut 3 kort:
+
+top = deck.take_top()
+dealer.add_card(top)
+dealer.remove_card([-1])
+top = deck.take_top()
+dealer.add_card(top)
+top = deck.take_top()
+dealer.add_card(top)
+top = deck.take_top()
+dealer.add_card(top)
+
+for t in dealer.cards:
+    print(str(t))
+
+num_of_cards = 5
+#total_cards1 = hand1.best_poker_hand_total(dealer.cards)
+#total_cards2 = hand2.best_poker_hand_total(dealer.cards)
+
+player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
 
 
-#deck = StandardDeck()
-#deck.shuffle()
-#print(len(deck.cards))
-#for t in deck.cards:
-#    t.print()
+print(player1 < player2)
+
+# Turn, alltså släng ett kort och lägg ut 4:e kortet:
+num_of_cards = 6
+top = deck.take_top()
+dealer.add_card(top)
+dealer.remove_card([-1])
+top = deck.take_top()
+dealer.add_card(top)
+
+for t in dealer.cards:
+    print(str(t))
+
+player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
+
+print(player1 < player2)
 
 
-#print(deck.cards[1][1].get_value()
+# River, alltså släng ett kort och lägg ut 5:e kortet:
 
-#if deck.cards[0][1].get_value() == deck.cards[1][1].get_value():
-#    if deck.cards[0][1].get_suit().value > deck.cards[1][1].get_suit().value:
-#        print(deck.cards[0][1].get_suit().name)
-#    else:
-#        print(deck.cards[1][1].get_suit().name)
+num_of_cards = 7
+top = deck.take_top()
+dealer.add_card(top)
+dealer.remove_card([-1])
+top = deck.take_top()
+dealer.add_card(top)
 
-#print(deck.cards[0][1].get_value())
+for t in dealer.cards:
+    print(str(t))
 
-#print("Top card:", end=" ")
-#top.print()
-#for t in deck.cards:
-#    t.print()
+player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
 
-#print(len(deck.cards))
+print(player1 < player2)
 
-
-#for t in hand.hand:
-#    t.print()
-
-
-index = [2, 0]
-#print("Print max index: ", max(index))
-#hand.remove_card(index)
-
-#for t in hand.hand:
-#    t.print()
-
-'''
-#print(hand.hand)
-ret = hand.best_poker_hand()
-#print(ret)
-discarded_cards = (input('Ange vilka kort du vill byta ut. Om du inte vill byta, tryck bara \' enter\' '))
-discarded_cards = eval(discarded_cards)
-# print(discarded_cards)
-hand.remove_card(discarded_cards)
-# for t in hand.hand:
-#     t.print()
-
-while hand.check_num_of_cards() < max_num_of_cards:
-    top = deck.take_top()
-    hand.add_card(top)
-
-for t in hand.hand:
-    t.print()
-
-ret = hand.best_poker_hand()
-'''
-
+# cards = []
+# hand3 = Hand()
+# for color in Suits:
+#     hand3.cards.append(JackCard(color))
+# hand3.remove_card([-1])
+# for color in Suits:
+#     hand3.cards.append(QueenCard(color))
+# hand3.remove_card([-1])
+# hand3.remove_card([-1])
+# for t in hand3.cards:
+#     print(str(t))
+#     player3 = hand3.best_poker_hand(kinds_of_values, [])
