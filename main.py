@@ -109,7 +109,10 @@ class Hand:
         self.cards = []
 
     def add_card(self, card):
-        self.cards.append(card)
+        if isinstance(card, PlayingCard):
+            self.cards.append(card)
+        else:
+            raise TypeError("Wrong kind of card!")
 
     def remove_card(self, index):
         index.sort()
@@ -119,7 +122,7 @@ class Hand:
                 for i in index:
                     self.cards.pop(i)
             else:
-                raise Exception("Index out of bounds exception")
+                raise IndexError("Index out of bounds exception")
 
     def sort_hand(self):
         self.cards.sort(key=lambda k: [k.get_suit().value, k.get_value()])
@@ -156,7 +159,6 @@ class Hand:
         if cond:
             return best_hand
 
-
     def __len__(self):
         return len(self.cards)
 
@@ -177,15 +179,17 @@ def full_house_test(list):
         temp_list = list.copy()
         temp_list.reverse()
         hand_rank = PokerHandType.full_house.value
-        rank_value = ((len(temp_list)-1 - temp_list.index(3), len(temp_list)-1 - temp_list.index(2)))
+        rank_value = ((len(temp_list)+1 - temp_list.index(3), len(temp_list)+1 - temp_list.index(2)))
         print('You got a full house with {}:s over {}:s' .format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
                                                                  kinds_of_values[len(temp_list)-1 - temp_list.index(2)]))
         return True, PokerHand(hand_rank, rank_value)
     elif list.count(3) == 2:
+        temp_list = list.copy()
+        temp_list.reverse()
         hand_rank = PokerHandType.full_house.value
-        rank_value = ((len(list) - list.index(3), list.index(3)+2))
-        print('den här funkar')
-        print('You got a full house with {}:s over {}:s'.format(len(list)-1 - list.index(3), list.index(3)+1))
+        rank_value = ((len(list)+1 - temp_list.index(3), list.index(3)+2))
+        print('You got a full house with {}:s over {}:s'.format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
+                                                                 kinds_of_values[list.index(3)]))
         return True, PokerHand(hand_rank, rank_value)
     else:
         return False, None
@@ -237,9 +241,9 @@ def three_of_a_kind_test(list, value_cards):
     if 3 in list:
         temp_list = list.copy()
         temp_list.reverse()
-        print('You got three of a kind in {}:s'.format(kinds_of_values[len(temp_list)+2 - temp_list.index(3)]))
+        print('You got three of a kind in {}:s'.format(kinds_of_values[list.index(3)]))
         hand_rank = PokerHandType.three_of_a_kind.value
-        rank_value = ((len(temp_list)+2 - temp_list.index(3), value_cards[-1]))
+        rank_value = ((len(temp_list) - temp_list.index(3), value_cards[-1]))
         return True, PokerHand(hand_rank, rank_value)
     else:
         return False, None
@@ -278,12 +282,13 @@ def high_card_test(list):
     ii = np.where(values == searchval)[0]
     a = []
     if len(ii) == 2:
-        for hc in range(0, 2):
+        for hc in range(1, 3):
             a.append(int(ii[-hc])+2)
     else:
-        for hc in range(0, 5):
+        for hc in range(1, 6):
             a.append(int(ii[-hc])+2)
     rank_value = ((a))
+    print(rank_value)
     return True, PokerHand(hand_rank, rank_value)
 
 
