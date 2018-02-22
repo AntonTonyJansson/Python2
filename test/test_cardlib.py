@@ -100,6 +100,10 @@ def test_deck():
 
 
 def test_straight_flush():
+    """
+    Creates a Hand with cards representing a straight flush. This test method tests if best_poker_hand returns
+    the correct PokerHand for this hand
+    """
     hand = Hand()
     for i in range(5):
         hand.add_card(NumberedCard(i+2, Suits.clubs))
@@ -108,6 +112,17 @@ def test_straight_flush():
 
 
 def test_compare_pokerhands():
-    pass
+    hand1 = Hand()
+    hand2 = Hand()
+    for i in range(5):
+        hand1.add_card(NumberedCard(i+2, Suits.spades))
+        hand2.add_card(NumberedCard(i+2, Suits.spades))
+    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
+    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    assert not (best_hand1 < best_hand2)
+    hand2.add_card(NumberedCard(i+3, Suits.spades))
+    best_hand3 = hand2.best_poker_hand(kinds_of_values, [])
+    assert best_hand1 < best_hand3
 
+    
 

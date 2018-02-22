@@ -213,7 +213,6 @@ def flush_test(cards, suit_cards, list):
     if list.count(1) >= 5:
         v = []
         for suit in Suits:
-            print(suit_cards)
             if suit_cards.count(suit) >= 5:
                 for card in cards:
                     if card.get_suit() == suit:
@@ -346,11 +345,6 @@ class PokerHand:
         elif self.hand_rank == hand2.hand_rank:
             if self.rank_value < hand2.rank_value:
                 return True
-            elif self.rank_value == hand2.rank_value:
-                if self.rank_value[1] < hand2.rank_value[1]:
-                    return True
-                else:
-                    return False
             else:
                 return False
         else:
