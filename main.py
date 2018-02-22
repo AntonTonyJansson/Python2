@@ -3,6 +3,7 @@ import enum
 import numpy as np
 import abc
 
+
 class PlayingCard(metaclass=abc.ABCMeta):
     def __init__(self, suit):
         self.suit = suit
@@ -122,7 +123,7 @@ class Hand:
                 for i in index:
                     self.cards.pop(i)
             else:
-                raise IndexError("Index out of bounds exception")
+                raise IndexError("Trying to remove a card that doesn't exist")
 
     def sort_hand(self):
         self.cards.sort(key=lambda k: [k.get_suit().value, k.get_value()])
@@ -134,6 +135,9 @@ class Hand:
     def best_poker_hand(self, kinds_of_values, table_cards):
         total_cards = self.best_poker_hand_total(table_cards)
         value_cards, list, suit_cards = create_bins_for_cards(total_cards)
+        cond, best_hand = straight_flush_test(total_cards, suit_cards, list)
+        if cond:
+            return best_hand
         cond, best_hand = four_of_a_kind_test(list, value_cards, kinds_of_values)
         if cond:
             return best_hand
@@ -163,7 +167,17 @@ class Hand:
         return len(self.cards)
 
 
-# Mycket upprensning behövs för de olika listorna så allt blir rätt värde
+def straight_flush_test(cards, suit_cards, list):
+    hand_rank = PokerHandType.straight_flush
+    straight_bool, straight = straight_test(list)
+    colour_bool, colour = flush_test(cards, suit_cards, list)
+    if straight_bool and colour_bool:
+        rank_value = straight.rank_value
+        return True, PokerHand(hand_rank, rank_value)
+    else:
+        return False, None
+
+
 def four_of_a_kind_test(list, value_cards, kinds_of_values):
     if 4 in list:
         print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
@@ -199,6 +213,7 @@ def flush_test(cards, suit_cards, list):
     if list.count(1) >= 5:
         v = []
         for suit in Suits:
+            print(suit_cards)
             if suit_cards.count(suit) >= 5:
                 for card in cards:
                     if card.get_suit() == suit:
@@ -207,8 +222,7 @@ def flush_test(cards, suit_cards, list):
                 hand_rank = PokerHandType.flush.value
                 rank_value = ((suit, v[-1]))
                 return True, PokerHand(hand_rank, rank_value)
-            else:
-                return False, None
+        return False, None
     else:
         return False, None
 
@@ -228,7 +242,7 @@ def straight_test(list):             # Måste modifieras för när listan går u
                         return False, None
                 if found_straight:
                     hand_rank = PokerHandType.straight.value
-                    rank_value = ((len(temp_list)+2 - i, len(temp_list)+2 - (i+1)))
+                    rank_value = ((len(temp_list)+1 - i))
                     return True, PokerHand(hand_rank, rank_value)
                 i += 1
             else:
