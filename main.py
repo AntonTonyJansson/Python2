@@ -168,7 +168,7 @@ class Hand:
 
 
 def straight_flush_test(cards, suit_cards, list, value_cards):
-    hand_rank = PokerHandType.straight_flush
+    hand_rank = PokerHandType.straight_flush.value
     straight_bool, straight = straight_test(list, value_cards)
     colour_bool, colour = flush_test(cards, suit_cards, list)
     if straight_bool and colour_bool:
@@ -180,7 +180,7 @@ def straight_flush_test(cards, suit_cards, list, value_cards):
 
 def four_of_a_kind_test(list, value_cards, kinds_of_values):
     if 4 in list:
-        print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
+        #print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
         hand_rank = PokerHandType.four_of_a_kind.value
         rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
         return True, PokerHand(hand_rank, rank_value)
@@ -194,16 +194,16 @@ def full_house_test(list):
         temp_list.reverse()
         hand_rank = PokerHandType.full_house.value
         rank_value = ((len(temp_list)+1 - temp_list.index(3), len(temp_list)+1 - temp_list.index(2)))
-        print('You got a full house with {}:s over {}:s' .format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
-                                                                 kinds_of_values[len(temp_list)-1 - temp_list.index(2)]))
+        #print('You got a full house with {}:s over {}:s' .format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
+        #                                                         kinds_of_values[len(temp_list)-1 - temp_list.index(2)]))
         return True, PokerHand(hand_rank, rank_value)
     elif list.count(3) == 2:
         temp_list = list.copy()
         temp_list.reverse()
         hand_rank = PokerHandType.full_house.value
         rank_value = ((len(list)+1 - temp_list.index(3), list.index(3)+2))
-        print('You got a full house with {}:s over {}:s'.format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
-                                                                 kinds_of_values[list.index(3)]))
+        #print('You got a full house with {}:s over {}:s'.format(kinds_of_values[len(temp_list)-1 - temp_list.index(3)],
+        #                                                         kinds_of_values[list.index(3)]))
         return True, PokerHand(hand_rank, rank_value)
     else:
         return False, None
@@ -228,12 +228,12 @@ def flush_test(cards, suit_cards, list):
 
 def straight_test(list, value_cards):             # Måste modifieras för när listan går utanför index i list
     if list.count(1) >= 5:
-        i = 0               # Problem with this method. Doesn't work when there is card outside of the straight
+                   # Problem with this method. Doesn't work when there is card outside of the straight
         temp_list = list.copy()
         temp_list.reverse()
-        for c in temp_list:  # Starting point (high card)
+        for i, c in enumerate(temp_list):  # Starting point (high card)
             # Check if we have the value - k in the set of cards:
-            if c > 0:
+            if c > 0 and i < len(temp_list)-4:
                 found_straight = True
                 for k in range(1, 5):
                     if temp_list[i+k] == 0:
@@ -242,11 +242,8 @@ def straight_test(list, value_cards):             # Måste modifieras för när 
                 if found_straight:
                     hand_rank = PokerHandType.straight.value
                     rank_value = ((len(temp_list)+1 - i, value_cards[-1]))
-                    print("rank_value straight: ",len(temp_list)+1 - i)
+                    #print("rank_value straight: ",len(temp_list)+1 - i)
                     return True, PokerHand(hand_rank, rank_value)
-                i += 1
-            else:
-                i += 1
         return False, None
     else:
         return False, None
@@ -274,7 +271,7 @@ def two_pairs_test(list, value_cards, kinds_of_values):
         #print('You got two pairs in {}:s over {}:s'.format(kinds_of_values[a],
         #                                                  kinds_of_values[b]))
         hand_rank = PokerHandType.two_pair.value
-        rank_value = ((((kinds_of_values[a], kinds_of_values[b])), value_cards[-1]))
+        rank_value = ((a+2, b+2, value_cards[-1]))
         return True, PokerHand(hand_rank, rank_value)
     else:
         return False, None
@@ -307,14 +304,10 @@ def high_card_test(list):
     searchval = 1
     ii = np.where(values == searchval)[0]
     a = []
-    if len(ii) == 2:
-        for hc in range(1, 3):
-            a.append(int(ii[-hc])+2)
-    else:
-        for hc in range(1, 6):
-            a.append(int(ii[-hc])+2)
-    rank_value = ((a))
-    print(rank_value)
+    for value in ii:
+        a.append(value+2)
+    a.reverse()
+    rank_value = tuple(a)
     return True, PokerHand(hand_rank, rank_value)
 
 

@@ -2,16 +2,6 @@ from nose.tools import assert_raises
 from main import *
 
 
-def test_math():
-    assert 1 + 1 == 2
-    assert 2 * 2 + 3 == 7
-# It is important to also test strange inputs,
-# like dividing what zero and see that good exceptions are thrown.
-# What happens if you try create a card with numerical value 0 or -1?
-    with assert_raises(ZeroDivisionError):
-        1 / 0
-
-
 def test_full_house():
     """
     Creates a Hand that contains a known full house and checks that best_poker_hand returns the correct values
@@ -24,12 +14,10 @@ def test_full_house():
         hand3.cards.append(QueenCard(color))
     hand3.remove_card([-1])
     #hand3.remove_card([-1])
-    for t in hand3.cards:
-        #print(str(t))
-        pass
+
     player3 = hand3.best_poker_hand(kinds_of_values, [])
     assert player3.hand_rank == PokerHandType.full_house.value
-    assert player3.rank_value == ((QueenCard.get_value(None), JackCard.get_value(None)))
+    assert player3.rank_value == (QueenCard.get_value(None), JackCard.get_value(None))
 
 
 def test_hand():
@@ -117,14 +105,18 @@ def test_straight_flush():
     hand2.add_card(QueenCard(Suits.spades))
     best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
     best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
-    for t in hand2.cards:
-        print(t)
-    assert best_hand1.rank_value == (i+2, i+2) and best_hand1.hand_rank.value == PokerHandType.straight_flush
-    print("Straight flush test: ", best_hand2.hand_rank)
-    #assert best_hand2.rank_value == (i+2, hand2.cards[-1].get_value())  # and best_hand2.hand_rank.value == PokerHandType.straight_flush
+
+    assert best_hand1.rank_value == (i+2, i+2) and best_hand1.hand_rank == PokerHandType.straight_flush.value
+    assert best_hand2.rank_value == (i+2, hand2.cards[-1].get_value()) and best_hand2.hand_rank == PokerHandType.straight_flush.value
+
+    assert best_hand1 < best_hand2
 
 
 def test_compare_pokerhands():
+    """
+    This method creates two known Hands where it is known which hand is the greater. The method test the lesser than
+    command for PokerHands
+    """
     hand1 = Hand()
     hand2 = Hand()
     for i in range(5):
@@ -205,6 +197,10 @@ def test_one_pair():
 
 
 def test_three_of_a_kind():
+    """
+    This method creates two hands, both with three of a kind and compares them to test that the return from
+    best_poker_hand is correct. It also tests the lesser than command for three of a kind.
+    """
     hand1 = Hand()
     hand2 = Hand()
     for colour in Suits:
@@ -220,7 +216,70 @@ def test_three_of_a_kind():
     assert best_hand1 < best_hand2
 
 
+def test_four_of_a_kind():
+    """
+    This method creates two hands, both with four of a kind and compares them to test that the return from
+    best_poker_hand is correct. It also tests the lesser than command for four of a kind.
+    """
+    hand1 = Hand()
+    hand2 = Hand()
+    for colour in Suits:
+        hand1.add_card(QueenCard(colour))
+        hand2.add_card(JackCard(colour))
+    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
+    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.four_of_a_kind.value
+    assert best_hand2 < best_hand1
 
+
+def test_two_pair():
+    """
+    This method creates two hands, both with two pair and compares them to test that the return from
+    best_poker_hand is correct. It also tests the lesser than command for two pair.
+    """
+    hand1 = Hand()
+    hand2 = Hand()
+    hand1.add_card(NumberedCard(3, Suits.spades))
+    hand1.add_card(NumberedCard(3, Suits.hearts))
+    hand1.add_card(NumberedCard(4, Suits.spades))
+    hand1.add_card(NumberedCard(4, Suits.hearts))
+
+    hand2.add_card(NumberedCard(3, Suits.clubs))
+    hand2.add_card(NumberedCard(3, Suits.diamonds))
+    hand2.add_card(NumberedCard(2, Suits.clubs))
+    hand2.add_card(NumberedCard(2, Suits.diamonds))
+
+    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
+    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+
+    assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.two_pair.value
+    assert best_hand1.rank_value == (4, 3, 4) and best_hand2.rank_value == (3, 2, 3)
+    assert best_hand2 < best_hand1
+    assert not best_hand1 < best_hand2
+
+
+def test_high_card():
+    """
+    This method creates two hands, where the best_poker_hand should return high_card only. It also test if the lesser
+    than works for high_card as well.
+    """
+    hand1 = Hand()
+    hand2 = Hand()
+    hand1.add_card(NumberedCard(5, Suits.diamonds))
+    hand1.add_card(NumberedCard(8, Suits.spades))
+    hand1.add_card(NumberedCard(10, Suits.hearts))
+    hand1.add_card(NumberedCard(2, Suits.diamonds))
+
+    hand2.add_card(NumberedCard(5, Suits.hearts))
+    hand2.add_card(JackCard(Suits.clubs))
+    hand2.add_card(NumberedCard(3, Suits.diamonds))
+
+    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
+    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+
+    assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.high_card.value
+    assert best_hand1.rank_value == (10, 8, 5, 2) and best_hand2.rank_value == (11, 5, 3)
+    assert best_hand1 < best_hand2
 
 
 
