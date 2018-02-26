@@ -37,16 +37,10 @@ class PlayingCard(metaclass=abc.ABCMeta):
         return self.get_name() + " of " + str(self.get_suit())
 
     def __lt__(self, other):
-        if self.get_value() < other.get_value():
-            return True
-        else:
-            return False
+        return self.get_value() < other.get_value()
 
-    # def __eq__(self, other):
-    #     if self.get_value() == other.get_value():
-    #         return True
-    #     else:
-    #         return False
+    def __eq__(self, other):
+        return self.get_value() == other.get_value() and self.get_suit() == other.get_suit()
 
 
 class NumberedCard(PlayingCard):
@@ -504,7 +498,5 @@ class PokerHand:
         self.rank_value = rank_value
 
     def __lt__(self, hand2):
-        if (self.hand_rank, self.rank_value) < (hand2.hand_rank, hand2.rank_value):
-            return True
-        else:
-            return False
+        return (self.hand_rank, self.rank_value) < (hand2.hand_rank, hand2.rank_value)
+

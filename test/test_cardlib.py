@@ -76,7 +76,8 @@ def test_deck():
     """
     deck = StandardDeck()
     assert len(deck.cards) == 52    # Check number of cards
-    assert len(set(deck.cards)) == 52   # Check number of individual elements
+    cards = [(card.get_value(), card.get_suit().value) for card in deck.cards]
+    assert len(set(cards)) == 52   # Check number of individual elements
     deck_standard = StandardDeck()
     deck.shuffle()
     card_list_1 = []
@@ -85,7 +86,8 @@ def test_deck():
         card_list_1.append(card.get_value())
         card_list_2.append(deck_standard.cards[i].get_value())
     assert card_list_1 != card_list_2   # Check that if shuffles
-    assert len(set(deck.cards)) == 52   # Check number of individual cards after shuffle
+    cards = [(card.get_value(), card.get_suit().value) for card in deck.cards]
+    assert len(set(cards)) == 52   # Check number of individual cards after shuffle
     top_card_2 = deck.cards[0]
     top_card_3 = deck.take_top()
     assert top_card_2 == top_card_3 and len(deck.cards) == 51   # Check that take_top takes the top card and removes it
