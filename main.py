@@ -18,7 +18,7 @@ class PlayingCard(metaclass=abc.ABCMeta):
         """
         :return: The value of the card, ranging from 2 to 14.
         """
-        pass        # Det var type raise notimplementetexception på abstracter? Måste fråga Mikael
+        pass
 
     def get_suit(self):
         """
@@ -49,7 +49,7 @@ class PlayingCard(metaclass=abc.ABCMeta):
     #         return False
 
 
-class NumberedCard(PlayingCard):    # Add name to the cards
+class NumberedCard(PlayingCard):
     """
     Class representing the numbered card in a deck which inherits from the PlayingCard class.
     """
@@ -109,6 +109,9 @@ class AceCard(PlayingCard):
 
 
 class Suits(enum.IntEnum):
+    """
+    This class defines the values of the suits using enums.
+    """
     hearts = 3
     spades = 2
     diamonds = 1
@@ -119,6 +122,9 @@ class Suits(enum.IntEnum):
 
 
 class StandardDeck:
+    """
+    StandardDeck is a class which describes a deck which contains 52 individual cards.
+    """
     def __init__(self):
         self.cards = []
 
@@ -136,9 +142,19 @@ class StandardDeck:
             self.cards.append(AceCard(color))
 
     def shuffle(self):
+        """
+        This method shuffles the deck.
+
+        :return: Shuffles the deck.
+        """
         shuffle(self.cards)
 
     def take_top(self):
+        """
+        This method takes the top card and removes it from the deck.
+
+        :return: the top_card of type PlayingCard
+        """
         top_card = self.cards.pop(0)
         return top_card
 
@@ -179,6 +195,7 @@ class Hand:
     def sort_hand(self):
         """
         Sorts the hand by suit and then by value.
+
         :return: Sorted cards in Hand.
         """
         self.cards.sort(key=lambda k: [k.get_suit().value, k.get_value()])
@@ -187,6 +204,7 @@ class Hand:
         """
         A simple method which collects all cards for a player, which includes the cards represented on the table in
         certain games.
+
         :param table_cards: Cards in a list representing tha cards on the table.
         :return: a list of all possible cards for a player.
         """
@@ -196,6 +214,7 @@ class Hand:
     def best_poker_hand(self, table_cards):
         """
         This method evaluates which cards in Hand makes best possible combination of cards.
+
         :param table_cards: A list of cards represented on the table
         :return: A PokerHand which is fully comparable with other PokerHand's with the normal comparable operators.
         """
@@ -236,6 +255,7 @@ class Hand:
 def straight_flush_test(cards, suit_cards, list, value_cards):
     """
     A method to evaluate if the player has a straight flush.
+
     :param cards: The cards available for the player to evaluate.
     :param suit_cards: A list of the suits the player has.
     :param list: A list which specifies which cards are in the Hand.
@@ -255,6 +275,7 @@ def straight_flush_test(cards, suit_cards, list, value_cards):
 def four_of_a_kind_test(list, value_cards):
     """
     A method to evaluate if the player has four of a kind.
+
     :param list: A list which specifies which cards are in the Hand.
     :param value_cards: The values of the cards in Hand.
     :return: Returns True and a PokerHand object if the player has four of a kind, otherwise False and None.
@@ -271,6 +292,7 @@ def four_of_a_kind_test(list, value_cards):
 def full_house_test(list):
     """
     A method to evaluate if the player has a full house.
+
     :param list: A list which specifies which cards are in the Hand.
     :return: Returns True and a PokerHand object if the player has a full house, otherwise False and None.
     """
@@ -297,6 +319,7 @@ def full_house_test(list):
 def flush_test(cards, suit_cards, list):
     """
     A method to evaluate if the player has a flush.
+
     :param cards: The cards available for the player to evaluate.
     :param suit_cards: A list of the suits the player has.
     :param list: A list which specifies which cards are in the Hand.
@@ -321,6 +344,7 @@ def flush_test(cards, suit_cards, list):
 def straight_test(list, value_cards):
     """
     A method to evaluate if the player has a straight.
+
     :param list: A list which specifies which cards are in the Hand.
     :param value_cards: The values of the cards in Hand.
     :return: Returns True and a PokerHand object if the player has a straight, otherwise False and None.
@@ -348,6 +372,7 @@ def straight_test(list, value_cards):
 def three_of_a_kind_test(list, value_cards):
     """
     A method to evaluate if the player has a three of a kind.
+
     :param list: A list which specifies which cards are in the Hand.
     :param value_cards: The values of the cards in Hand.
     :return: Returns True and a PokerHand object if the player has a three of a kind, otherwise False and None.
@@ -366,6 +391,7 @@ def three_of_a_kind_test(list, value_cards):
 def two_pairs_test(list, value_cards):
     """
     A method to evaluate if the player has two pairs.
+
     :param list: A list which specifies which cards are in the Hand.
     :param value_cards: The values of the cards in Hand.
     :return: Returns True and a PokerHand object if the player has two pairs, otherwise False and None.
@@ -388,6 +414,7 @@ def two_pairs_test(list, value_cards):
 def one_pair_test(list):
     """
     A method to evaluate if the player has a pair.
+
     :param list: A list which specifies which cards are in the Hand.
     :return: Returns True and a PokerHand object if the player has a pair, otherwise False and None.
     """
@@ -411,6 +438,7 @@ def one_pair_test(list):
 def high_card_test(list):
     """
     A method to evaluate what the highest card in players Hand is.
+
     :param list: A list which specifies which cards are in the Hand.
     :return: Returns True and a PokerHand object with the highest cards in the players Hand.
     """
@@ -429,15 +457,19 @@ def high_card_test(list):
 def create_bins_for_cards(cards):
     """
     A method that creates bins for a Hand which is then used in best_poker_hand.
+
     :param cards: All cards available for a player.
     :return: Returns some lists of values and suits.
     """
-    list = [0]*13   # Detta bör vara 13?
-    suit_cards = [0]*num_of_cards # Bör göras generellt
+    num_of_cards = len(cards)
+    # Initialize the bins
+    list = [0]*13
+    suit_cards = [0]*num_of_cards
     i = 0
     value_cards = []
+    # Fill the bins
     for v in cards:
-        list[v.get_value()-2] += 1  # Ändrade till -2 för att få det på rätt position
+        list[v.get_value()-2] += 1
         suit_cards[i] = v.get_suit().value
         value_cards.append(v.get_value())
         i += 1
@@ -476,4 +508,3 @@ class PokerHand:
             return True
         else:
             return False
-

@@ -54,7 +54,8 @@
 <dt id="main.Hand">
 <em class="property">class </em><code class="descclassname">main.</code><code class="descname">Hand</code><a class="headerlink" href="#main.Hand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Here are some comments on the Hand class</p>
+<p>The Hand class represents a hand of a player which contains cards. Cards can be added and removed from the hand
+as well as sort the cards in the hand. It can also evaluate which combination of cards gives the best pokerhand.</p>
 <dl class="method">
 <dt id="main.Hand.add_card">
 <code class="descname">add_card</code><span class="sig-paren">(</span><em>card</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.add_card" title="Permalink to this definition">¶</a></dt>
@@ -73,18 +74,34 @@
 <dl class="method">
 <dt id="main.Hand.best_poker_hand">
 <code class="descname">best_poker_hand</code><span class="sig-paren">(</span><em>table_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.best_poker_hand" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method evaluates which cards in Hand makes best possible combination of cards.
-:param table_cards: A list of cards represented on the table
-:return: A PokerHand which is fully comparable with other PokerHand’s with the normal comparable operators.</p>
+<dd><p>This method evaluates which cards in Hand makes best possible combination of cards.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_cards</strong> – A list of cards represented on the table</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PokerHand which is fully comparable with other PokerHand’s with the normal comparable operators.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="main.Hand.best_poker_hand_total">
 <code class="descname">best_poker_hand_total</code><span class="sig-paren">(</span><em>table_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.best_poker_hand_total" title="Permalink to this definition">¶</a></dt>
 <dd><p>A simple method which collects all cards for a player, which includes the cards represented on the table in
-certain games.
-:param table_cards: Cards in a list representing tha cards on the table.
-:return: a list of all possible cards for a player.</p>
+certain games.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_cards</strong> – Cards in a list representing tha cards on the table.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of all possible cards for a player.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -105,8 +122,15 @@ certain games.
 <dl class="method">
 <dt id="main.Hand.sort_hand">
 <code class="descname">sort_hand</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.sort_hand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sorts the hand by suit and then by value.
-:return: Sorted cards in Hand.</p>
+<dd><p>Sorts the hand by suit and then by value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Sorted cards in Hand.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -200,99 +224,238 @@ certain games.
 </dd></dl>
 
 <dl class="class">
+<dt id="main.StandardDeck">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">StandardDeck</code><a class="headerlink" href="#main.StandardDeck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>StandardDeck is a class which describes a deck which contains 52 individual cards.</p>
+<dl class="method">
+<dt id="main.StandardDeck.shuffle">
+<code class="descname">shuffle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.StandardDeck.shuffle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method shuffles the deck.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Shuffles the deck.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.StandardDeck.take_top">
+<code class="descname">take_top</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.StandardDeck.take_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes the top card and removes it from the deck.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the top_card of type PlayingCard</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="main.Suits">
 <em class="property">class </em><code class="descclassname">main.</code><code class="descname">Suits</code><a class="headerlink" href="#main.Suits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.IntEnum</span></code></p>
-<p>An enumeration.</p>
+<p>This class defines the values of the suits using enums.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.create_bins_for_cards">
 <code class="descclassname">main.</code><code class="descname">create_bins_for_cards</code><span class="sig-paren">(</span><em>cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.create_bins_for_cards" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method that creates bins for a Hand which is then used in best_poker_hand.
-:param cards: All cards available for a player.
-:return: Returns some lists of values and suits.</p>
+<dd><p>A method that creates bins for a Hand which is then used in best_poker_hand.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cards</strong> – All cards available for a player.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns some lists of values and suits.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.flush_test">
 <code class="descclassname">main.</code><code class="descname">flush_test</code><span class="sig-paren">(</span><em>cards</em>, <em>suit_cards</em>, <em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.flush_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a flush.
-:param cards: The cards available for the player to evaluate.
-:param suit_cards: A list of the suits the player has.
-:param list: A list which specifies which cards are in the Hand.
-:return: Returns True and a PokerHand object if the player has a flush, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a flush.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cards</strong> – The cards available for the player to evaluate.</li>
+<li><strong>suit_cards</strong> – A list of the suits the player has.</li>
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a flush, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.four_of_a_kind_test">
 <code class="descclassname">main.</code><code class="descname">four_of_a_kind_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.four_of_a_kind_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has four of a kind.
-:param list: A list which specifies which cards are in the Hand.
-:param value_cards: The values of the cards in Hand.
-:return: Returns True and a PokerHand object if the player has four of a kind, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has four of a kind.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has four of a kind, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.full_house_test">
 <code class="descclassname">main.</code><code class="descname">full_house_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.full_house_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a full house.
-:param list: A list which specifies which cards are in the Hand.
-:return: Returns True and a PokerHand object if the player has a full house, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a full house.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object if the player has a full house, otherwise False and None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.high_card_test">
 <code class="descclassname">main.</code><code class="descname">high_card_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.high_card_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate what the highest card in players Hand is.
-:param list: A list which specifies which cards are in the Hand.
-:return: Returns True and a PokerHand object with the highest cards in the players Hand.</p>
+<dd><p>A method to evaluate what the highest card in players Hand is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object with the highest cards in the players Hand.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.one_pair_test">
 <code class="descclassname">main.</code><code class="descname">one_pair_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.one_pair_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a pair.
-:param list: A list which specifies which cards are in the Hand.
-:return: Returns True and a PokerHand object if the player has a pair, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a pair.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object if the player has a pair, otherwise False and None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.straight_flush_test">
 <code class="descclassname">main.</code><code class="descname">straight_flush_test</code><span class="sig-paren">(</span><em>cards</em>, <em>suit_cards</em>, <em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.straight_flush_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a straight flush.
-:param cards: The cards available for the player to evaluate.
-:param suit_cards: A list of the suits the player has.
-:param list: A list which specifies which cards are in the Hand.
-:param value_cards: The values of the cards in Hand.
-:return: Returns True and a PokerHand object if the player has a straight flush, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a straight flush.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cards</strong> – The cards available for the player to evaluate.</li>
+<li><strong>suit_cards</strong> – A list of the suits the player has.</li>
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a straight flush, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.straight_test">
 <code class="descclassname">main.</code><code class="descname">straight_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.straight_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a straight.
-:param list: A list which specifies which cards are in the Hand.
-:param value_cards: The values of the cards in Hand.
-:return: Returns True and a PokerHand object if the player has a straight, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a straight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a straight, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.three_of_a_kind_test">
 <code class="descclassname">main.</code><code class="descname">three_of_a_kind_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.three_of_a_kind_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has a three of a kind.
-:param list: A list which specifies which cards are in the Hand.
-:param value_cards: The values of the cards in Hand.
-:return: Returns True and a PokerHand object if the player has a three of a kind, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has a three of a kind.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a three of a kind, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="main.two_pairs_test">
 <code class="descclassname">main.</code><code class="descname">two_pairs_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.two_pairs_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method to evaluate if the player has two pairs.
-:param list: A list which specifies which cards are in the Hand.
-:param value_cards: The values of the cards in Hand.
-:return: Returns True and a PokerHand object if the player has two pairs, otherwise False and None.</p>
+<dd><p>A method to evaluate if the player has two pairs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has two pairs, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
