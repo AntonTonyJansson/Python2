@@ -15,7 +15,7 @@ def test_full_house():
     hand3.remove_card([-1])
     #hand3.remove_card([-1])
 
-    player3 = hand3.best_poker_hand(kinds_of_values, [])
+    player3 = hand3.best_poker_hand([])
     assert player3.hand_rank == PokerHandType.full_house.value
     assert player3.rank_value == (QueenCard.get_value(None), JackCard.get_value(None))
 
@@ -54,8 +54,8 @@ def test_lesser_than():
         hand2.add_card(AceCard(color))
     hand2.remove_card([-1])
 
-    best_hand_1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand_2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand_1 = hand1.best_poker_hand([])
+    best_hand_2 = hand2.best_poker_hand([])
     assert best_hand_1 < best_hand_2
 
 
@@ -76,7 +76,8 @@ def test_deck():
     """
     deck = StandardDeck()
     assert len(deck.cards) == 52    # Check number of cards
-    assert len(set(deck.cards)) == 52   # Check number of individual elements
+    cards = [(card.get_value(), card.get_suit().value) for card in deck.cards]
+    assert len(set(cards)) == 52   # Check number of individual elements
     deck_standard = StandardDeck()
     deck.shuffle()
     card_list_1 = []
@@ -85,7 +86,8 @@ def test_deck():
         card_list_1.append(card.get_value())
         card_list_2.append(deck_standard.cards[i].get_value())
     assert card_list_1 != card_list_2   # Check that if shuffles
-    assert len(set(deck.cards)) == 52   # Check number of individual cards after shuffle
+    cards = [(card.get_value(), card.get_suit().value) for card in deck.cards]
+    assert len(set(cards)) == 52   # Check number of individual cards after shuffle
     top_card_2 = deck.cards[0]
     top_card_3 = deck.take_top()
     assert top_card_2 == top_card_3 and len(deck.cards) == 51   # Check that take_top takes the top card and removes it
@@ -103,8 +105,8 @@ def test_straight_flush():
         hand1.add_card(NumberedCard(i+2, Suits.clubs))
         hand2.add_card(NumberedCard(i+2, Suits.clubs))
     hand2.add_card(QueenCard(Suits.spades))
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
 
     assert best_hand1.rank_value == (i+2, i+2) and best_hand1.hand_rank == PokerHandType.straight_flush.value
     assert best_hand2.rank_value == (i+2, hand2.cards[-1].get_value()) and best_hand2.hand_rank == PokerHandType.straight_flush.value
@@ -122,11 +124,11 @@ def test_compare_pokerhands():
     for i in range(5):
         hand1.add_card(NumberedCard(i+2, Suits.spades))
         hand2.add_card(NumberedCard(i+2, Suits.spades))
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
     assert not (best_hand1 < best_hand2)
     hand2.add_card(NumberedCard(i+3, Suits.spades))
-    best_hand3 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand3 = hand2.best_poker_hand([])
     assert best_hand1 < best_hand3
 
 def test_sort_hand():
@@ -187,7 +189,7 @@ def test_one_pair():
     pair_hand.add_card((NumberedCard(6, Suits.spades)))
     # pair_hand.add_card(AceCard(Suits.clubs)) (Uncomment this to verify that two pairs assert Error)
 
-    best_hand = pair_hand.best_poker_hand(kinds_of_values, [])
+    best_hand = pair_hand.best_poker_hand([])
     pair_hand_rank_value = (value, (AceCard.get_value(None), KingCard.get_value(None), JackCard.get_value(None)))
 
     # Determine if the hand_rank has the right value (1)
@@ -208,8 +210,8 @@ def test_three_of_a_kind():
         hand2.add_card(QueenCard(colour))
     hand1.remove_card([-1])
     hand2.remove_card([-1])
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
     hand_rank = PokerHandType.three_of_a_kind
     assert best_hand1.hand_rank == hand_rank and best_hand2.hand_rank == hand_rank
     assert best_hand1.rank_value == ((11, 11, 11)) and best_hand2.rank_value == ((12, 12, 12))
@@ -226,8 +228,8 @@ def test_four_of_a_kind():
     for colour in Suits:
         hand1.add_card(QueenCard(colour))
         hand2.add_card(JackCard(colour))
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
     assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.four_of_a_kind.value
     assert best_hand2 < best_hand1
 
@@ -249,8 +251,8 @@ def test_two_pair():
     hand2.add_card(NumberedCard(2, Suits.clubs))
     hand2.add_card(NumberedCard(2, Suits.diamonds))
 
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
 
     assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.two_pair.value
     assert best_hand1.rank_value == (4, 3, 4) and best_hand2.rank_value == (3, 2, 3)
@@ -274,8 +276,8 @@ def test_high_card():
     hand2.add_card(JackCard(Suits.clubs))
     hand2.add_card(NumberedCard(3, Suits.diamonds))
 
-    best_hand1 = hand1.best_poker_hand(kinds_of_values, [])
-    best_hand2 = hand2.best_poker_hand(kinds_of_values, [])
+    best_hand1 = hand1.best_poker_hand([])
+    best_hand2 = hand2.best_poker_hand([])
 
     assert best_hand1.hand_rank == best_hand2.hand_rank == PokerHandType.high_card.value
     assert best_hand1.rank_value == (10, 8, 5, 2) and best_hand2.rank_value == (11, 5, 3)

@@ -44,17 +44,418 @@
 <div class="toctree-wrapper compound">
 </div>
 <span class="target" id="module-main"></span><dl class="class">
+<dt id="main.AceCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">AceCard</code><span class="sig-paren">(</span><em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.AceCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#main.PlayingCard" title="main.PlayingCard"><code class="xref py py-class docutils literal"><span class="pre">main.PlayingCard</span></code></a></p>
+<p>Class representing the ace card in a deck which inherits from the PlayingCard class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.Hand">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">Hand</code><a class="headerlink" href="#main.Hand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The Hand class represents a hand of a player which contains cards. Cards can be added and removed from the hand
+as well as sort the cards in the hand. It can also evaluate which combination of cards gives the best pokerhand.</p>
+<dl class="method">
+<dt id="main.Hand.add_card">
+<code class="descname">add_card</code><span class="sig-paren">(</span><em>card</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.add_card" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>card</strong> – An object of type PlayingCard</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing, it adds a card to the players Hand object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Hand.best_poker_hand">
+<code class="descname">best_poker_hand</code><span class="sig-paren">(</span><em>table_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.best_poker_hand" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method evaluates which cards in Hand makes best possible combination of cards.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_cards</strong> – A list of cards represented on the table</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PokerHand which is fully comparable with other PokerHand’s with the normal comparable operators.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Hand.best_poker_hand_total">
+<code class="descname">best_poker_hand_total</code><span class="sig-paren">(</span><em>table_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.best_poker_hand_total" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple method which collects all cards for a player, which includes the cards represented on the table in
+certain games.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_cards</strong> – Cards in a list representing tha cards on the table.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of all possible cards for a player.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Hand.remove_card">
+<code class="descname">remove_card</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.remove_card" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – a list of indices of which cards should be thrown away</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Removes one or multiple cards from Hand if possible</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Hand.sort_hand">
+<code class="descname">sort_hand</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Hand.sort_hand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts the hand by suit and then by value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Sorted cards in Hand.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="main.JackCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">JackCard</code><span class="sig-paren">(</span><em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.JackCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#main.PlayingCard" title="main.PlayingCard"><code class="xref py py-class docutils literal"><span class="pre">main.PlayingCard</span></code></a></p>
+<p>Class representing the jack card in a deck which inherits from the PlayingCard class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.KingCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">KingCard</code><span class="sig-paren">(</span><em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.KingCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#main.PlayingCard" title="main.PlayingCard"><code class="xref py py-class docutils literal"><span class="pre">main.PlayingCard</span></code></a></p>
+<p>Class representing the king card in a deck which inherits from the PlayingCard class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.NumberedCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">NumberedCard</code><span class="sig-paren">(</span><em>value</em>, <em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NumberedCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#main.PlayingCard" title="main.PlayingCard"><code class="xref py py-class docutils literal"><span class="pre">main.PlayingCard</span></code></a></p>
+<p>Class representing the numbered card in a deck which inherits from the PlayingCard class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.PlayingCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">PlayingCard</code><span class="sig-paren">(</span><em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.PlayingCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class represents a standard class for all individual cards in a deck.</p>
+<dl class="method">
+<dt id="main.PlayingCard.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.PlayingCard.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the card, for instance “Jack” or “1” etc.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.PlayingCard.get_suit">
+<code class="descname">get_suit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.PlayingCard.get_suit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The suit of the card, either spade, diamond, clubs or hearts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.PlayingCard.get_value">
+<code class="descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.PlayingCard.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of the card, ranging from 2 to 14.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="main.PokerHand">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">PokerHand</code><span class="sig-paren">(</span><em>hand_rank</em>, <em>rank_value</em><span class="sig-paren">)</span><a class="headerlink" href="#main.PokerHand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Uses PokerHandType to create an PokerHand object. Overrides some comparable operators for easier comparisons.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="main.PokerHandType">
 <em class="property">class </em><code class="descclassname">main.</code><code class="descname">PokerHandType</code><a class="headerlink" href="#main.PokerHandType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.IntEnum</span></code></p>
-<p>An enumeration.</p>
+<p>A PokerHandType class which specifies which kind of PokerHand is worth the most.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.QueenCard">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">QueenCard</code><span class="sig-paren">(</span><em>suit</em><span class="sig-paren">)</span><a class="headerlink" href="#main.QueenCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#main.PlayingCard" title="main.PlayingCard"><code class="xref py py-class docutils literal"><span class="pre">main.PlayingCard</span></code></a></p>
+<p>Class representing the queen card in a deck which inherits from the PlayingCard class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.StandardDeck">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">StandardDeck</code><a class="headerlink" href="#main.StandardDeck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>StandardDeck is a class which describes a deck which contains 52 individual cards.</p>
+<dl class="method">
+<dt id="main.StandardDeck.shuffle">
+<code class="descname">shuffle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.StandardDeck.shuffle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method shuffles the deck.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Shuffles the deck.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.StandardDeck.take_top">
+<code class="descname">take_top</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.StandardDeck.take_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes the top card and removes it from the deck.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the top_card of type PlayingCard</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="main.Suits">
 <em class="property">class </em><code class="descclassname">main.</code><code class="descname">Suits</code><a class="headerlink" href="#main.Suits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.IntEnum</span></code></p>
-<p>An enumeration.</p>
+<p>This class defines the values of the suits using enums.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.create_bins_for_cards">
+<code class="descclassname">main.</code><code class="descname">create_bins_for_cards</code><span class="sig-paren">(</span><em>cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.create_bins_for_cards" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method that creates bins for a Hand which is then used in best_poker_hand.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cards</strong> – All cards available for a player.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns some lists of values and suits.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.flush_test">
+<code class="descclassname">main.</code><code class="descname">flush_test</code><span class="sig-paren">(</span><em>cards</em>, <em>suit_cards</em>, <em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.flush_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a flush.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cards</strong> – The cards available for the player to evaluate.</li>
+<li><strong>suit_cards</strong> – A list of the suits the player has.</li>
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a flush, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.four_of_a_kind_test">
+<code class="descclassname">main.</code><code class="descname">four_of_a_kind_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.four_of_a_kind_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has four of a kind.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has four of a kind, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.full_house_test">
+<code class="descclassname">main.</code><code class="descname">full_house_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.full_house_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a full house.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object if the player has a full house, otherwise False and None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.high_card_test">
+<code class="descclassname">main.</code><code class="descname">high_card_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.high_card_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate what the highest card in players Hand is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object with the highest cards in the players Hand.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.one_pair_test">
+<code class="descclassname">main.</code><code class="descname">one_pair_test</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#main.one_pair_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a pair.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list</strong> – A list which specifies which cards are in the Hand.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True and a PokerHand object if the player has a pair, otherwise False and None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.straight_flush_test">
+<code class="descclassname">main.</code><code class="descname">straight_flush_test</code><span class="sig-paren">(</span><em>cards</em>, <em>suit_cards</em>, <em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.straight_flush_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a straight flush.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cards</strong> – The cards available for the player to evaluate.</li>
+<li><strong>suit_cards</strong> – A list of the suits the player has.</li>
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a straight flush, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.straight_test">
+<code class="descclassname">main.</code><code class="descname">straight_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.straight_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a straight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a straight, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.three_of_a_kind_test">
+<code class="descclassname">main.</code><code class="descname">three_of_a_kind_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.three_of_a_kind_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has a three of a kind.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has a three of a kind, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.two_pairs_test">
+<code class="descclassname">main.</code><code class="descname">two_pairs_test</code><span class="sig-paren">(</span><em>list</em>, <em>value_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#main.two_pairs_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to evaluate if the player has two pairs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list</strong> – A list which specifies which cards are in the Hand.</li>
+<li><strong>value_cards</strong> – The values of the cards in Hand.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True and a PokerHand object if the player has two pairs, otherwise False and None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
