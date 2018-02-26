@@ -36,6 +36,18 @@ class PlayingCard(metaclass=abc.ABCMeta):
     def __str__(self):
         return self.get_name() + " of " + str(self.get_suit())
 
+    def __lt__(self, other):
+        if self.get_value() < other.get_value():
+            return True
+        else:
+            return False
+
+    # def __eq__(self, other):
+    #     if self.get_value() == other.get_value():
+    #         return True
+    #     else:
+    #         return False
+
 
 class NumberedCard(PlayingCard):    # Add name to the cards
     """
@@ -133,7 +145,8 @@ class StandardDeck:
 
 class Hand:
     """
-    Here are some comments on the Hand class
+    The Hand class represents a hand of a player which contains cards. Cards can be added and removed from the hand
+    as well as sort the cards in the hand. It can also evaluate which combination of cards gives the best pokerhand.
     """
 
     def __init__(self):
@@ -150,6 +163,10 @@ class Hand:
             raise TypeError("Wrong kind of card!")
 
     def remove_card(self, index):
+        """
+        :param index: a list of indices of which cards should be thrown away
+        :return: Removes one or multiple cards from Hand if possible
+        """
         index.sort()
         index.reverse()
         if type(index) == list and len(index) > 0:
@@ -160,19 +177,34 @@ class Hand:
                 raise IndexError("Trying to remove a card that doesn't exist")
 
     def sort_hand(self):
+        """
+        Sorts the hand by suit and then by value.
+        :return: Sorted cards in Hand.
+        """
         self.cards.sort(key=lambda k: [k.get_suit().value, k.get_value()])
 
     def best_poker_hand_total(self, table_cards):
+        """
+        A simple method which collects all cards for a player, which includes the cards represented on the table in
+        certain games.
+        :param table_cards: Cards in a list representing tha cards on the table.
+        :return: a list of all possible cards for a player.
+        """
         total_cards = self.cards + table_cards
         return total_cards
 
-    def best_poker_hand(self, kinds_of_values, table_cards):
+    def best_poker_hand(self, table_cards):
+        """
+        This method evaluates which cards in Hand makes best possible combination of cards.
+        :param table_cards: A list of cards represented on the table
+        :return: A PokerHand which is fully comparable with other PokerHand's with the normal comparable operators.
+        """
         total_cards = self.best_poker_hand_total(table_cards)
         value_cards, list, suit_cards = create_bins_for_cards(total_cards)
         cond, best_hand = straight_flush_test(total_cards, suit_cards, list, value_cards)
         if cond:
             return best_hand
-        cond, best_hand = four_of_a_kind_test(list, value_cards, kinds_of_values)
+        cond, best_hand = four_of_a_kind_test(list, value_cards)
         if cond:
             return best_hand
         cond, best_hand = full_house_test(list)
@@ -187,10 +219,10 @@ class Hand:
         cond, best_hand = three_of_a_kind_test(list, value_cards)
         if cond:
             return best_hand
-        cond, best_hand = two_pairs_test(list, value_cards, kinds_of_values)
+        cond, best_hand = two_pairs_test(list, value_cards)
         if cond:
             return best_hand
-        cond, best_hand = one_pair_test(list, kinds_of_values)
+        cond, best_hand = one_pair_test(list)
         if cond:
             return best_hand
         cond, best_hand = high_card_test(list)
@@ -202,6 +234,14 @@ class Hand:
 
 
 def straight_flush_test(cards, suit_cards, list, value_cards):
+    """
+    A method to evaluate if the player has a straight flush.
+    :param cards: The cards available for the player to evaluate.
+    :param suit_cards: A list of the suits the player has.
+    :param list: A list which specifies which cards are in the Hand.
+    :param value_cards: The values of the cards in Hand.
+    :return: Returns True and a PokerHand object if the player has a straight flush, otherwise False and None.
+    """
     hand_rank = PokerHandType.straight_flush.value
     straight_bool, straight = straight_test(list, value_cards)
     colour_bool, colour = flush_test(cards, suit_cards, list)
@@ -212,17 +252,28 @@ def straight_flush_test(cards, suit_cards, list, value_cards):
         return False, None
 
 
-def four_of_a_kind_test(list, value_cards, kinds_of_values):
+def four_of_a_kind_test(list, value_cards):
+    """
+    A method to evaluate if the player has four of a kind.
+    :param list: A list which specifies which cards are in the Hand.
+    :param value_cards: The values of the cards in Hand.
+    :return: Returns True and a PokerHand object if the player has four of a kind, otherwise False and None.
+    """
     if 4 in list:
         #print('You got four of a kind in {}:s'.format(kinds_of_values[list.index(4)]))
         hand_rank = PokerHandType.four_of_a_kind.value
-        rank_value = ((kinds_of_values[list.index(4)], value_cards[-1]))
+        rank_value = ((list.index(4)+2, value_cards[-1]))
         return True, PokerHand(hand_rank, rank_value)
     else:
         return False, None
 
 
 def full_house_test(list):
+    """
+    A method to evaluate if the player has a full house.
+    :param list: A list which specifies which cards are in the Hand.
+    :return: Returns True and a PokerHand object if the player has a full house, otherwise False and None.
+    """
     if 3 in list and 2 in list:
         temp_list = list.copy()
         temp_list.reverse()
@@ -244,6 +295,13 @@ def full_house_test(list):
 
 
 def flush_test(cards, suit_cards, list):
+    """
+    A method to evaluate if the player has a flush.
+    :param cards: The cards available for the player to evaluate.
+    :param suit_cards: A list of the suits the player has.
+    :param list: A list which specifies which cards are in the Hand.
+    :return: Returns True and a PokerHand object if the player has a flush, otherwise False and None.
+    """
     if list.count(1) >= 5:
         v = []
         for suit in Suits:
@@ -260,9 +318,14 @@ def flush_test(cards, suit_cards, list):
         return False, None
 
 
-def straight_test(list, value_cards):             # Måste modifieras för när listan går utanför index i list
+def straight_test(list, value_cards):
+    """
+    A method to evaluate if the player has a straight.
+    :param list: A list which specifies which cards are in the Hand.
+    :param value_cards: The values of the cards in Hand.
+    :return: Returns True and a PokerHand object if the player has a straight, otherwise False and None.
+    """
     if list.count(1) >= 5:
-                   # Problem with this method. Doesn't work when there is card outside of the straight
         temp_list = list.copy()
         temp_list.reverse()
         for i, c in enumerate(temp_list):  # Starting point (high card)
@@ -272,7 +335,6 @@ def straight_test(list, value_cards):             # Måste modifieras för när 
                 for k in range(1, 5):
                     if temp_list[i+k] == 0:
                         found_straight = False
-
                 if found_straight:
                     hand_rank = PokerHandType.straight.value
                     rank_value = ((len(temp_list)+1 - i, value_cards[-1]))
@@ -284,6 +346,12 @@ def straight_test(list, value_cards):             # Måste modifieras för när 
 
 
 def three_of_a_kind_test(list, value_cards):
+    """
+    A method to evaluate if the player has a three of a kind.
+    :param list: A list which specifies which cards are in the Hand.
+    :param value_cards: The values of the cards in Hand.
+    :return: Returns True and a PokerHand object if the player has a three of a kind, otherwise False and None.
+    """
     if 3 in list:
         temp_list = list.copy()
         temp_list.reverse()
@@ -295,7 +363,13 @@ def three_of_a_kind_test(list, value_cards):
         return False, None
 
 
-def two_pairs_test(list, value_cards, kinds_of_values):
+def two_pairs_test(list, value_cards):
+    """
+    A method to evaluate if the player has two pairs.
+    :param list: A list which specifies which cards are in the Hand.
+    :param value_cards: The values of the cards in Hand.
+    :return: Returns True and a PokerHand object if the player has two pairs, otherwise False and None.
+    """
     if 2 in list and list.count(2) > 1:
         values = np.array(list)
         searchval = 2
@@ -311,21 +385,23 @@ def two_pairs_test(list, value_cards, kinds_of_values):
         return False, None
 
 
-def one_pair_test(list, kinds_of_values):
+def one_pair_test(list):
+    """
+    A method to evaluate if the player has a pair.
+    :param list: A list which specifies which cards are in the Hand.
+    :return: Returns True and a PokerHand object if the player has a pair, otherwise False and None.
+    """
     if list.count(2) == 1:
         if list.count(1) > 0:
-            #print('this is list', list)
             values = np.array(list)
             searchval = 1
             ii = np.where(values == searchval)[0]
-            #print('this is ii', ii)
             a = int(ii[-1])+2
             b = int(ii[-2])+2
             c = int(ii[-3])+2
             rank_value = ((list.index(2)+2, ((a, b, c))))
         else:
             rank_value = ((list.index(2)+2))
-        #print('You got one pair in {}:s'.format(kinds_of_values[list.index(2)]))
         hand_rank = PokerHandType.pair.value
         return True, PokerHand(hand_rank, rank_value)
     else:
@@ -333,6 +409,11 @@ def one_pair_test(list, kinds_of_values):
 
 
 def high_card_test(list):
+    """
+    A method to evaluate what the highest card in players Hand is.
+    :param list: A list which specifies which cards are in the Hand.
+    :return: Returns True and a PokerHand object with the highest cards in the players Hand.
+    """
     hand_rank = PokerHandType.high_card.value
     values = np.array(list)
     searchval = 1
@@ -346,6 +427,11 @@ def high_card_test(list):
 
 
 def create_bins_for_cards(cards):
+    """
+    A method that creates bins for a Hand which is then used in best_poker_hand.
+    :param cards: All cards available for a player.
+    :return: Returns some lists of values and suits.
+    """
     list = [0]*13   # Detta bör vara 13?
     suit_cards = [0]*num_of_cards # Bör göras generellt
     i = 0
@@ -360,6 +446,9 @@ def create_bins_for_cards(cards):
 
 
 class PokerHandType(enum.IntEnum):
+    """
+    A PokerHandType class which specifies which kind of PokerHand is worth the most.
+    """
     high_card = 0
     pair = 1
     two_pair = 2
@@ -372,6 +461,9 @@ class PokerHandType(enum.IntEnum):
 
 
 class PokerHand:
+    """
+    Uses PokerHandType to create an PokerHand object. Overrides some comparable operators for easier comparisons.
+    """
     # Använder PokerHandType för PokerHand objektet
     def __init__(self, hand_rank, rank_value):
         # Value of hand
@@ -380,18 +472,15 @@ class PokerHand:
         self.rank_value = rank_value
 
     def __lt__(self, hand2):
-        if self.hand_rank < hand2.hand_rank:
+        if (self.hand_rank, self.rank_value) < (hand2.hand_rank, hand2.rank_value):
             return True
-        elif self.hand_rank == hand2.hand_rank:
-            if self.rank_value < hand2.rank_value:
-                return True
-            else:
-                return False
         else:
             return False
 
 
-kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+
+
+#kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 #game = Chicago()
 #deck = StandardDeck()
 #deck.shuffle()
