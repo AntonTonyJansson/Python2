@@ -5,6 +5,9 @@ import abc
 
 
 class PlayingCard(metaclass=abc.ABCMeta):
+    """
+    This class represents a standard class for all individual cards in a deck.
+    """
     def __init__(self, suit):
         self.suit = suit
         if not isinstance(suit, Suits):
@@ -12,13 +15,22 @@ class PlayingCard(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_value(self):
+        """
+        :return: The value of the card, ranging from 2 to 14.
+        """
         pass        # Det var type raise notimplementetexception på abstracter? Måste fråga Mikael
 
     def get_suit(self):
+        """
+        :return: The suit of the card, either spade, diamond, clubs or hearts.
+        """
         return self.suit
 
     @abc.abstractmethod
     def get_name(self):
+        """
+        :return: The name of the card, for instance "Jack" or "1" etc.
+        """
         pass
 
     def __str__(self):
@@ -26,6 +38,9 @@ class PlayingCard(metaclass=abc.ABCMeta):
 
 
 class NumberedCard(PlayingCard):    # Add name to the cards
+    """
+    Class representing the numbered card in a deck which inherits from the PlayingCard class.
+    """
     def __init__(self, value, suit):
         self.value = value
         super().__init__(suit)
@@ -38,6 +53,9 @@ class NumberedCard(PlayingCard):    # Add name to the cards
 
 
 class JackCard(PlayingCard):
+    """
+    Class representing the jack card in a deck which inherits from the PlayingCard class.
+    """
     def get_value(self):
         return 11
 
@@ -46,6 +64,9 @@ class JackCard(PlayingCard):
 
 
 class QueenCard(PlayingCard):
+    """
+    Class representing the queen card in a deck which inherits from the PlayingCard class.
+    """
     def get_value(self):
         return 12
 
@@ -54,6 +75,9 @@ class QueenCard(PlayingCard):
 
 
 class KingCard(PlayingCard):
+    """
+    Class representing the king card in a deck which inherits from the PlayingCard class.
+    """
     def get_value(self):
         return 13
 
@@ -62,6 +86,9 @@ class KingCard(PlayingCard):
 
 
 class AceCard(PlayingCard):
+    """
+    Class representing the ace card in a deck which inherits from the PlayingCard class.
+    """
     def get_value(self):
         return 14
 
@@ -105,11 +132,18 @@ class StandardDeck:
 
 
 class Hand:
+    """
+    Here are some comments on the Hand class
+    """
 
     def __init__(self):
         self.cards = []
 
     def add_card(self, card):
+        """
+        :param card: An object of type PlayingCard
+        :return: Nothing, it adds a card to the players Hand object
+        """
         if isinstance(card, PlayingCard):
             self.cards.append(card)
         else:
@@ -359,97 +393,97 @@ class PokerHand:
 
 kinds_of_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 #game = Chicago()
-deck = StandardDeck()
-deck.shuffle()
-num_of_cards = 2
+#deck = StandardDeck()
+#deck.shuffle()
+#num_of_cards = 2
 
-hand1 = Hand()
-hand2 = Hand()
-dealer = Hand()
+#hand1 = Hand()
+#hand2 = Hand()
+#dealer = Hand()
 
 # Ge spelare 1 ett kort sen spelare två, tills båda har 2 kort:
 
-top = deck.take_top()
-hand1.add_card(top)
-top = deck.take_top()
-hand2.add_card(top)
-top = deck.take_top()
-hand1.add_card(top)
-top = deck.take_top()
-hand2.add_card(top)
+#top = deck.take_top()
+#hand1.add_card(top)
+#top = deck.take_top()
+#hand2.add_card(top)
+#top = deck.take_top()
+#hand1.add_card(top)
+#top = deck.take_top()
+#hand2.add_card(top)
 
-print('This is player one\'s hand:')
-for t in hand1.cards:
-    print(str(t))
+#print('This is player one\'s hand:')
+#for t in hand1.cards:
+#    print(str(t))
 
-print('This is player two\'s hand:')
-for t in hand2.cards:
-    print(str(t))
+#print('This is player two\'s hand:')
+#for t in hand2.cards:
+#    print(str(t))
 
-player1 = hand1.best_poker_hand(kinds_of_values, [])
-player2 = hand2.best_poker_hand(kinds_of_values, [])
+#player1 = hand1.best_poker_hand(kinds_of_values, [])
+#player2 = hand2.best_poker_hand(kinds_of_values, [])
 
-print('Is player one\'s hand worse than players two\'s?')
-print(player1 < player2)
+#print('Is player one\'s hand worse than players two\'s?')
+#print(player1 < player2)
 
 # Flop:en, alltså dealern tar bort översta kortet och lägger ut 3 kort:
 
-top = deck.take_top()
-dealer.add_card(top)
-dealer.remove_card([-1])
-top = deck.take_top()
-dealer.add_card(top)
-top = deck.take_top()
-dealer.add_card(top)
-top = deck.take_top()
-dealer.add_card(top)
+#top = deck.take_top()
+#dealer.add_card(top)
+#dealer.remove_card([-1])
+#top = deck.take_top()
+#dealer.add_card(top)
+#top = deck.take_top()
+#dealer.add_card(top)
+#top = deck.take_top()
+#dealer.add_card(top)
 
-for t in dealer.cards:
-    print(str(t))
+#for t in dealer.cards:
+#    print(str(t))
 
-num_of_cards = 5
+#num_of_cards = 5
 #total_cards1 = hand1.best_poker_hand_total(dealer.cards)
 #total_cards2 = hand2.best_poker_hand_total(dealer.cards)
 
-player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
-player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
+#player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+#player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
 
 
-print(player1 < player2)
+#print(player1 < player2)
 
 # Turn, alltså släng ett kort och lägg ut 4:e kortet:
-num_of_cards = 6
-top = deck.take_top()
-dealer.add_card(top)
-dealer.remove_card([-1])
-top = deck.take_top()
-dealer.add_card(top)
+#num_of_cards = 6
+#top = deck.take_top()
+#dealer.add_card(top)
+#dealer.remove_card([-1])
+#top = deck.take_top()
+#dealer.add_card(top)
 
-for t in dealer.cards:
-    print(str(t))
+#for t in dealer.cards:
+#    print(str(t))
 
-player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
-player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
+#player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+#player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
 
-print(player1 < player2)
+#print(player1 < player2)
 
 
 # River, alltså släng ett kort och lägg ut 5:e kortet:
 
 num_of_cards = 7
-top = deck.take_top()
-dealer.add_card(top)
-dealer.remove_card([-1])
-top = deck.take_top()
-dealer.add_card(top)
+#top = deck.take_top()
+#dealer.add_card(top)
+#dealer.remove_card([-1])
+#top = deck.take_top()
+#dealer.add_card(top)
 
-for t in dealer.cards:
-    print(str(t))
+#for t in dealer.cards:
+#    print(str(t))
 
-player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
-player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
+#player1 = hand1.best_poker_hand(kinds_of_values, dealer.cards)
+#player2 = hand2.best_poker_hand(kinds_of_values, dealer.cards)
 
-print(player1 < player2)
+#print(player1 < player2)
 
 # cards = []
 # hand3 = Hand()
